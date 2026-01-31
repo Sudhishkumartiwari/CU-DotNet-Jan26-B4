@@ -34,11 +34,11 @@ namespace opps
     }
     class EmergencyPatient : Patient
     {
-        public int SecurityLevel { get; set; }
+        public int SeverityLevel { get; set; }
         public override decimal CalculateFinalBill()
         {
             decimal total;
-            return total = BaseFee * SecurityLevel;
+            return total = BaseFee * SeverityLevel;
         }
     }
     class HospitalBilling
@@ -110,7 +110,7 @@ namespace opps
                 {
                     Name = "Rahul",
                     BaseFee = 3000,
-                    SecurityLevel = 2
+                    SeverityLevel = 2
                 });
             Console.WriteLine("Daily Report ");
             billing.GenerateDailyReport();
