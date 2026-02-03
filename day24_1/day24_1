@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace newweek
+{
+
+    internal class employee
+    {
+       
+        static void Main(string[] args)
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add(101, "Alice");
+            ht.Add(102, "Bob");
+            ht.Add(103, "charlie");
+            ht.Add(104, "Diana");
+            if (!ht.ContainsKey(105))
+            {
+                ht.Add(105, "Edward");
+            }
+            else
+            {
+                Console.WriteLine("Key 105 already exists");
+            }
+            foreach (DictionaryEntry item in ht)
+            {
+                Console.WriteLine(item.Key + " : " + item.Value);
+            }
+
+            string empName = (string)ht[102];
+            Console.WriteLine($"102 employee name is {empName}");
+            ht.Remove(103);
+            Console.WriteLine(ht.Count);
+            Console.WriteLine("after deletion");
+            foreach (DictionaryEntry item in ht)
+            {
+                Console.WriteLine(item.Key + " : " + item.Value);
+            }
+        }
+    }
+}
