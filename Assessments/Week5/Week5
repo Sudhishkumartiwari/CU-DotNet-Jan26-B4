@@ -1,0 +1,158 @@
+namespace Assesment5
+{
+    class RestrictedDestinationException : Exception
+    {
+        public string Deniedlocation { get; }
+        public RestrictedDestinationException(string location) : base($"Denied: {location}")
+        {
+            Deniedlocation = location;
+        }
+    }
+    class InsecurePackagingException : Exception
+    {
+        public InsecurePackagingException()
+            : base("Denied: Fragile shipment must be reinforced.")
+        {
+        }
+    }
+    interface ILoggable
+    {
+        public void SaveLog(string message);
+    }
+    abstract class Shipment
+    {
+        public string TrackId { get; set; }
+        public double Weight { get; set; }
+        public string Destination { get; set; }
+        public bool IsFragile { get; set; }
+        public bool IsReinforced { get; set; }
+
+        string[] RestrictedZones =
+        {"North Pole", "Unknown Island","Pakistan","Bangladesh"};
+        public void ValidShipment()
+        {
+            if (Weight <= 0)
+                Console.WriteLine("should be greater than zero ");
+            if (RestrictedZones.Contains(Destination))
+                throw new RestrictedDestinationException(Destination);
+            if (IsFragile && !IsReinforced)
+                throw new InsecurePackagingException();
+        }
+        public abstract void ProcessShipment();
+
+    }
+    class ExpressShipment : Shipment
+    {
+        public override void ProcessShipment()
+        {
+            ValidShipment();
+            Console.WriteLine($"Express Shipment: {TrackId} Fast processing initiated.");
+        }
+    }
+    class HeavyFreight : Shipment, ILoggable
+    {
+        public bool HeavyLiftPermit { get; set; }
+        public override void ProcessShipment()
+        {
+            ValidShipment();
+            if (Weight > 1000 && !HeavyLiftPermit)
+            {
+                Console.WriteLine("Heavy freight requires a Heavy Lift permit!");
+                SaveLog("Shipment processing - Permit granted.");
+            }
+            else
+            {
+                Console.WriteLine($"Heavy freight {TrackId} processed successfully.");
+                SaveLog("Heavy freight shipment processed.");
+            }
+        }
+        public void SaveLog(string message)
+        {
+            Console.WriteLine($"LOG: {message}");
+        }
+    }
+    class LogManager : ILoggable
+    {
+        string path = "shipment_audit.log";
+        public LogManager()
+        {
+            File.WriteAllText(path, string.Empty);
+        }
+        public void SaveLog(string message)
+        {
+            using (StreamWriter sw = new StreamWriter(path, true))
+            {
+                sw.WriteLine($"{DateTime.Now} : {message}");
+            }
+
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            ILoggable logger = new LogManager();
+            List<Shipment> sh = new List<Shipment>()
+            {
+                new ExpressShipment
+                {
+                    TrackId="SH01",
+                    Weight=950,
+                    Destination="Delhi",
+
+                },
+               new HeavyFreight
+                {
+                TrackId="SH02",
+                Weight=1001,
+                Destination="Mumbai",
+                HeavyLiftPermit = false
+                },
+                new ExpressShipment
+                {
+                    TrackId="SH03",
+                    Weight=100,
+                    Destination="Pakistan"
+                },
+                new ExpressShipment
+                {
+                    TrackId="SH04",
+                    Weight=100,
+                    Destination="Bangladesh"
+                },
+                new ExpressShipment
+                 {
+                    TrackId = "SH05",
+                    Weight = 200,
+                    Destination = "Delhi",
+                    IsFragile = true,
+                    IsReinforced = false
+                 }
+            };
+            foreach (var shipments in sh)
+            {
+                try
+                {
+                    shipments.ProcessShipment();
+                    logger.SaveLog($"Success: Shipment {shipments.TrackId} processed");
+                }
+                catch (RestrictedDestinationException ex)
+                {
+                    logger.SaveLog($" Alert : {ex.Message}");
+                }
+                catch (InsecurePackagingException ex)
+                {
+                    logger.SaveLog(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    logger.SaveLog($"error : {ex.Message}");
+                }
+                finally
+                {
+                    Console.WriteLine($"Processing attempt finished Id : {shipments.TrackId}");
+                }
+            }
+        }
+    }
+}
