@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
+class Person
+{
+    public string Name { get; set; }
+    public decimal Paid { get; set; }
+    public decimal Balance { get; set; }
+
+    public Person(string name, decimal paid)
+    {
+        Name = name;
+        Paid = paid;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        List<Person> people = new List<Person>
+        {
+            new Person("Aman", 900m),
+            new Person("Soman", 0m),
+            new Person("Kartik", 1290m)
+        };
+
+        decimal total = people.Sum(p => p.Paid);
+        decimal fairShare = total / people.Count;
+
+        foreach (var person in people)
+        {
+            person.Balance = Math.Round(person.Paid - fairShare, 2);
+        }
+
+        List<Person> creditors = people.Where(p => p.Balance > 0)
+                                       .OrderByDescending(p => p.Balance)
+                                       .ToList();
+
+        List<Person> debtors = people.Where(p => p.Balance < 0)
+                                     .OrderBy(p => p.Balance)
+                                     .ToList();
+
+        List<string> csvLines = new List<string>();
+        csvLines.Add("Payer,Receiver,Amount");
+
+        int i = 0, j = 0;
+
+        while (i < debtors.Count && j < creditors.Count)
+        {
+            var debtor = debtors[i];
+            var creditor = creditors[j];
+
+            decimal amount = Math.Min(Math.Abs(debtor.Balance), creditor.Balance);
+            amount = Math.Round(amount, 2);
+
+            csvLines.Add(debtor.Name + "," + creditor.Name + "," + amount.ToString("F2"));
+
+            debtor.Balance += amount;
+            creditor.Balance -= amount;
+
+            if (Math.Abs(debtor.Balance) < 0.01m) i++;
+            if (creditor.Balance < 0.01m) j++;
+        }
+
+        foreach (var line in csvLines)
+        {
+            Console.WriteLine(line);
+        }
+    }
+}
