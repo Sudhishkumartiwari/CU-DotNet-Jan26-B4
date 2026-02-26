@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Tarrifcalculation
+{
+    abstract class UtilityBill
+    {
+        public int ConsumerId { get; set; }
+        public string ConsumerName { get; set; }
+        public decimal UnitsConsumed { get; set; }
+        public decimal RatePerUnit { get; set; }
+        public abstract decimal CalculateBillAmount();
+        public virtual decimal CalculateTax(decimal billAmount)
+        {
+            return billAmount * 0.05m; // 5% tax
+        }
+        public void PrintBill()
+        {
+            decimal billAmount = CalculateBillAmount();
+            decimal tax = CalculateTax(billAmount);
+            decimal finalAmount = billAmount + tax;
+
+            Console.WriteLine("        Utility Bill       ");
+            Console.WriteLine($"Consumer ID   : {ConsumerId}");
+            Console.WriteLine($"Consumer Name : {ConsumerName}");
+            Console.WriteLine($"Units Used    : {UnitsConsumed}");
+            Console.WriteLine($"Bill Amount   : ₹{billAmount}");
+            Console.WriteLine($"Tax           : ₹{tax}");
+            Console.WriteLine($"Final Payable : ₹{finalAmount}");
+            Console.WriteLine();
+        }
+    }
+    class ElectricityBill : UtilityBill
+    {
+        public override decimal CalculateBillAmount()
+        {
+            decimal amount = UnitsConsumed * RatePerUnit;
+            if (UnitsConsumed > 300)
+            {
+                amount += amount * 0.10m; //10% surcharge
+            }
+            return amount;
+        }
+
+    }
+    class WaterBill : UtilityBill
+    {
+        public override decimal CalculateBillAmount()
+        {
+            return UnitsConsumed * RatePerUnit;
+        }
+        public override decimal CalculateTax(decimal billAmount)
+        {
+            return billAmount * 0.02m; //2% tax
+        }
+    }
+    class GasBill : UtilityBill
+    {
+        public override decimal CalculateBillAmount()
+        {
+            return (UnitsConsumed * RatePerUnit) + 150; //fixed charge
+        }
+
+        public override decimal CalculateTax(decimal billAmount)
+        {
+            return 0; 
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            List<UtilityBill> bills = new List<UtilityBill>
+            {
+                new ElectricityBill
+                {
+                    ConsumerId = 101,
+                    ConsumerName = "Rahul",
+                    UnitsConsumed = 100,
+                    RatePerUnit = 10
+                },
+                new WaterBill
+                {
+                    ConsumerId = 102,
+                    ConsumerName = "Kholi",
+                    UnitsConsumed = 180,
+                    RatePerUnit = 18
+                },
+                new GasBill
+                {
+                    ConsumerId = 103,
+                    ConsumerName = "Dhoni",
+                    UnitsConsumed = 700,
+                    RatePerUnit =7           
+                }
+            };
+            bills.Sort();
+            foreach (UtilityBill bill in bills)
+            {
+                bill.PrintBill(); 
+            }
+        }
+    }
+}
