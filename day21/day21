@@ -1,0 +1,112 @@
+using System;
+using System.Collections.Generic;
+
+class Policy
+{
+    public string HolderName { get; set; }
+    public decimal Premium { get; set; }
+    public int RiskScore { get; set; }
+    public DateTime RenewalDate { get; set; }
+
+    public Policy(string holderName, decimal premium, int riskScore, DateTime renewalDate)
+    {
+        HolderName = holderName;
+        Premium = premium;
+        RiskScore = riskScore;
+        RenewalDate = renewalDate;
+    }
+
+    public override string ToString()
+    {
+        return "Holder: " + HolderName +
+               " | Premium: " + Premium +
+               " | RiskScore: " + RiskScore +
+               " | Renewal: " + RenewalDate.ToShortDateString();
+    }
+}
+
+class PolicyTracker
+{
+    private Dictionary<string, Policy> policies = new Dictionary<string, Policy>();
+
+    public void AddPolicy(string policyId, Policy policy)
+    {
+        policies[policyId] = policy;
+    }
+
+    public void BulkAdjustment()
+    {
+        foreach (var item in policies)
+        {
+            if (item.Value.RiskScore > 75)
+            {
+                item.Value.Premium += item.Value.Premium * 0.05m;
+            }
+        }
+    }
+
+    public void CleanUp()
+    {
+        List<string> keysToRemove = new List<string>();
+
+        foreach (var item in policies)
+        {
+            if (item.Value.RenewalDate < DateTime.Today.AddYears(-3))
+            {
+                keysToRemove.Add(item.Key);
+            }
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            policies.Remove(key);
+        }
+    }
+
+    public string GetPolicy(string policyId)
+    {
+        if (policies.TryGetValue(policyId, out Policy policy))
+        {
+            return policy.ToString();
+        }
+        else
+        {
+            return "Policy Not Found.";
+        }
+    }
+
+    public void DisplayAll()
+    {
+        foreach (var item in policies)
+        {
+            Console.WriteLine("ID: " + item.Key + " -> " + item.Value);
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        PolicyTracker tracker = new PolicyTracker();
+
+        tracker.AddPolicy("P101", new Policy("Rahul Sharma", 12000m, 80, DateTime.Today.AddYears(-1)));
+        tracker.AddPolicy("P102", new Policy("Amit Verma", 15000m, 60, DateTime.Today.AddYears(-4)));
+        tracker.AddPolicy("P103", new Policy("Sneha Gupta", 10000m, 90, DateTime.Today.AddYears(-2)));
+
+        Console.WriteLine("All Policies");
+        tracker.DisplayAll();
+
+        Console.WriteLine("\nAfter Bulk Adjustment");
+        tracker.BulkAdjustment();
+        tracker.DisplayAll();
+
+        Console.WriteLine("\nAfter CleanUp");
+        tracker.CleanUp();
+        tracker.DisplayAll();
+
+        Console.WriteLine("\nSecurity Check");
+        Console.WriteLine(tracker.GetPolicy("P101"));
+        Console.WriteLine(tracker.GetPolicy("P999"));
+    }
+}
