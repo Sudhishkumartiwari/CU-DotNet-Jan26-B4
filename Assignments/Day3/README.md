@@ -1,0 +1,3 @@
+Create a document providing all steps for
+publishing using self contained and dependent mode
+ 
