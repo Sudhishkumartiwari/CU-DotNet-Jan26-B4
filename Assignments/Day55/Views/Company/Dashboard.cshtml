@@ -1,0 +1,51 @@
+﻿@model List<DashBoard.Models.Employee>
+
+@{
+    ViewData["Title"] = "Corporate Pulse Dashboard";
+}
+<div class="container mt-4">
+    <h2>@ViewData["DepartmentName"] Department Dashboard</h2>
+    <div class="alert alert-primary mt-3">
+        <strong>Daily Announcement:</strong> @ViewBag.Announcement
+    </div>
+    @{
+        bool status = (bool)ViewData["ServerStatus"];
+    }
+    @if (status)
+    {
+        <div class="alert alert-success">
+            Department Status: Active
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            Department Status: Under Maintenance
+        </div>
+    }
+
+    <h3 class="mt-4">Team Members</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in Model)
+            {
+                <tr>
+                    <td>@emp.EmployeeId</td>
+                    <td>@emp.Name</td>
+                    <td>@emp.Position</td>
+                    <td>@emp.Salary</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</div>
