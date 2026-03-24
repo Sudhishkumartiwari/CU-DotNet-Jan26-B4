@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Sum Calculator</title>
+  </head>
+  <body>
+    <div class="container">
+      <input type="text" id="num1" onblur="validateAndSum()" />
+      <span>+</span>
+      <input type="text" id="num2" onblur="validateAndSum()" />
+      <button class="btn-equals">=</button>
+      <input type="text" id="result" readonly value="Error" />
+    </div>
+
+    <script>
+      function validateAndSum() {
+        const n1 = document.getElementById("num1");
+        const n2 = document.getElementById("num2");
+        const res = document.getElementById("result");
+
+        function checkInput(input) {
+          const val = input.value.trim();
+
+          if (val === "") {
+            input.style.backgroundColor = "red";
+            return null;
+          } else if (isNaN(val)) {
+            input.style.backgroundColor = "yellow";
+            return null;
+          } else {
+            input.style.backgroundColor = "white";
+            return parseFloat(val);
+          }
+        }
+
+        const val1 = checkInput(n1);
+        const val2 = checkInput(n2);
+
+        if (val1 !== null && val2 !== null) {
+          res.value = val1 + val2;
+          res.style.backgroundColor = "white";
+        } else {
+          res.value = "Error";
+          res.style.backgroundColor = "orange";
+        }
+      }
+
+      window.onload = validateAndSum;
+    </script>
+  </body>
+</html>

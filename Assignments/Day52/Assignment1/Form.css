@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+body{
+    background : linear-gradient(135deg, #2da4cc , rgb(74, 74, 178) );
+}
+.h1{
+    color: black;
+    text-align: center;
+    font-family: Arial, sans-serif;     
+}
+table {
+    text-align: center;
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 50%;
+    font-size: 25px;
+    background-color: #c9e2ea;
+    
+}
+td {
+    padding: 10px;
+    border: 1px solid black;
+}
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+.R {
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+.h {
+    width: 100%;
+    height: 100px;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+button {
+    text-align:justify;
+    height: 30px;
+    width: 150px;
+    padding: 10px 20px;
+    border: solid black;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white;
+}
+
+placeholder {
+    color: black;
+}
+One{
+    gap: 10px;
+}
+
