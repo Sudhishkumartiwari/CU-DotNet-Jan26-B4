@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FinTrackpro.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Portfolio";
+    double total = (double)ViewData["Total"];
+}
+
+<h1>Portfolio</h1>
+@if (TempData["Message"] != null)
+{
+    <div class="alert aleat-success">@TempData["Message"]</div>
+}
+<p><strong>Total Portfolio Value:</strong> @total</p>
+<p><strong>Total + 500:</strong> @(total + 500)</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    <a href="/Asset/Info/@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
