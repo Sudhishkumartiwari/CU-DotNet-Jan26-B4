@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Assessment13/Assessment13.csproj" />
+  <Project Path="Frontend/Frontend.csproj" />
+</Solution>
