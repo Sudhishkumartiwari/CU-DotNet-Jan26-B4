@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "NorthwindCatalog\\NorthwindCatalog.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "NorthwindServices\\NorthwindServices.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
