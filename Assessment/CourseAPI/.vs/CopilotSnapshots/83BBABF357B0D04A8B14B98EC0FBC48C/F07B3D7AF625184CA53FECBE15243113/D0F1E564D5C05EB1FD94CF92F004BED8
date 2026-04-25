@@ -1,0 +1,32 @@
+﻿using CourseAPI.Models;
+
+namespace CourseAPI.Services
+{
+    public class CourseService : ICourseService
+    {
+        public Task<Course> Create(Course c)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Course>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Course> GetByID(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Course> Update(Course c)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

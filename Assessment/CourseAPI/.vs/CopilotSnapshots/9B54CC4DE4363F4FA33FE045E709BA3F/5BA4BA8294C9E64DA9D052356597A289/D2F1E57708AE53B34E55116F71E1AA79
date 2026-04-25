@@ -1,0 +1,12 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "CourseAPIContext": "Data Source=.\\sqlexpress;Initial Catalog=DbCourseAPI;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"
+  }
+}

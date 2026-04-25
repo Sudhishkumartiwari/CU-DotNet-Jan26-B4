@@ -1,0 +1,12 @@
+﻿using FluentValidation;
+
+namespace CourseAPI.Validators
+{
+    public class UpdateValidator : AbstractValidator<UpdateValidator>
+    {
+        public UpdateValidator()
+        {
+            
+        }
+    }
+}

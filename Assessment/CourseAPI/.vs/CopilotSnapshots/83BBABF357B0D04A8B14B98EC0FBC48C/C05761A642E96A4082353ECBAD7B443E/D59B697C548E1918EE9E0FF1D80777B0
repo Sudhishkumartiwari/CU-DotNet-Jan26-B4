@@ -1,0 +1,63 @@
+﻿using CourseAPI.Data;
+using CourseAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace CourseAPI.Repository
+{
+    public class CourseRepo : ICourseRepo
+    {
+        private readonly CourseAPIContext _context;
+
+        public CourseRepo(CourseAPIContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Course> Create(Course c)
+        {
+            await _context.Courses.AddAsync(c);
+            await _context.SaveChangesAsync();
+            return c;
+        }
+
+        public async Task Delete(int id)
+        {
+            var course = await _context.Courses.FindAsync(id);
+            if (course == null)
+            {
+                return;
+            }
+
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Course> GetAll(Course c)
+        {
+            var course = await _context.Courses.AsNoTracking().FirstOrDefaultAsync();
+            return course ?? new Course();
+        }
+
+        public async Task<Course> GetByID(Course c)
+        {
+            var course = await _context.Courses.AsNoTracking().FirstOrDefaultAsync(x => x.Id == c.Id);
+            return course ?? new Course();
+        }
+
+        public async Task<Course> Update(Course c)
+        {
+            var course = await _context.Courses.FindAsync(c.Id);
+            if (course == null)
+            {
+                return new Course();
+            }
+
+            course.Title = c.Title;
+            course.Summary = c.Summary;
+            course.Price = c.Price;
+
+            await _context.SaveChangesAsync();
+            return course;
+        }
+    }
+}

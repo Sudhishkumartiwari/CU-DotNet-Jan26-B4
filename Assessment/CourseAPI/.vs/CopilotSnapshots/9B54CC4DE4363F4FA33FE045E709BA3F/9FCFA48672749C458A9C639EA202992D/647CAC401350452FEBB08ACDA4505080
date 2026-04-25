@@ -1,0 +1,12 @@
+﻿using FluentValidation;
+
+namespace CourseAPI.Validators
+{
+    public class GetByIdValidator : AbstractValidator<GetByIdValidator>
+    {
+        public GetByIdValidator()
+        {
+            RuleFor(x => x.Dt)
+        }
+    }
+}
